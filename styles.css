@@ -1,0 +1,72 @@
+/* 样式代码 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+nav button, .urgent-btn {
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+nav button:hover, .urgent-btn:hover {
+    background-color: #45a049;
+}
+
+#main-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.task-text {
+    flex: 1;
+    font-size: 16px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.mark-btn, .delete-btn, .urgent-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+}
+
+.mark-btn:hover, .urgent-btn:hover {
+    color: #4CAF50;
+}
+
+.delete-btn:hover {
+    color: #f44336;
+}
