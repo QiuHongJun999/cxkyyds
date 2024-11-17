@@ -3,23 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多功能备忘应用</title>
+    <title>Multi-Function Memo Application</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Add an icon library like Font Awesome for quick access to icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body class="light-theme">
     <header>
-        <h1>多功能备忘应用</h1>
-        <nav>
-            <button onclick="showModule('memo')">备忘录</button>
-            <button onclick="showModule('reminder')">事项提醒</button>
-            <button onclick="showModule('todo')">查看待办事项</button>
+        <h1 id="app-title"><i class="fas fa-sticky-note"></i> Multi-Function Memo Application</h1>
+        <div class="header-controls">
+            <button id="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-adjust"></i> Switch Theme
+            </button>
+            <button id="language-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> Switch Language
+            </button>
+        </div>
+        <nav class="nav-bar">
+            <button id="btn-memo" onclick="showModule('memo')">
+                <i class="fas fa-pencil-alt"></i> Memo
+            </button>
+            <button id="btn-reminder" onclick="showModule('reminder')">
+                <i class="fas fa-clock"></i> Task Reminder
+            </button>
+            <button id="btn-todo" onclick="showModule('todo')">
+                <i class="fas fa-list"></i> To-Do List
+            </button>
+            <button id="btn-urgent" class="urgent-btn" onclick="showUrgentTasks()">
+                <i class="fas fa-exclamation-triangle"></i> Urgent Tasks
+            </button>
         </nav>
-        <button class="urgent-btn" onclick="showUrgentTasks()">紧急任务</button>
     </header>
 
     <main id="main-content">
-        <!-- 模块内容将动态加载至此处 -->
+        <!-- Module content will be dynamically injected here -->
     </main>
+
+    <div id="feedback-popup" class="hidden">
+        <p id="feedback-text"></p>
+        <img id="feedback-emoji" alt="Feedback Emoji" />
+    </div>
 
     <script src="script.js"></script>
 </body>
