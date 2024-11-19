@@ -30,20 +30,22 @@ header {
     margin-bottom: 15px;
     display: flex;
     align-items: center;
+    gap: 10px; /* Space between icon and text */
 }
 
 #app-title i {
-    margin-right: 10px;
     color: #4CAF50;
+    font-size: 1.5em;
 }
 
 .header-controls {
     margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
 }
 
 header button, nav button, .urgent-btn {
     padding: 10px 15px;
-    margin: 5px;
     border-radius: 10px;
     border: none;
     background-color: #4CAF50;
@@ -52,8 +54,12 @@ header button, nav button, .urgent-btn {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* Space between icon and text */
     transition: transform 0.2s, background-color 0.3s;
+}
+
+header button i, nav button i {
+    font-size: 1.2em; /* Adjust icon size */
 }
 
 header button:hover, nav button:hover, .urgent-btn:hover {
@@ -69,7 +75,7 @@ header button:hover, nav button:hover, .urgent-btn:hover {
 }
 
 .urgent-btn i {
-    color: #fff; /* 确保图标与按钮文本一致 */
+    color: #fff; /* Ensure icon matches button text color */
 }
 
 nav.nav-bar {
@@ -77,11 +83,6 @@ nav.nav-bar {
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-}
-
-nav button i {
-    font-size: 18px; /* 图标大小 */
-    color: white;
 }
 
 #main-content {
@@ -124,9 +125,4 @@ nav button i {
 
 .hidden {
     display: none;
-}
-
-/* Additional styling for buttons with icons */
-button i {
-    font-size: 1.2em;
 }

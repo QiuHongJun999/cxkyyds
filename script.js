@@ -4,18 +4,24 @@ let currentLanguage = 'en'; // Default language
 let todos = []; // Task list
 let reminders = []; // Reminders list
 let urgentTasks = []; // Urgent tasks list
+let familyTasks = []; // Family tasks list
+let workTasks = []; // Work tasks list
 
 // Load data from LocalStorage
 function loadData() {
     const savedTodos = localStorage.getItem('todos');
     const savedReminders = localStorage.getItem('reminders');
     const savedUrgentTasks = localStorage.getItem('urgentTasks');
+    const savedFamilyTasks = localStorage.getItem('familyTasks');
+    const savedWorkTasks = localStorage.getItem('workTasks');
     const savedTheme = localStorage.getItem('theme');
     const savedLanguage = localStorage.getItem('language');
     
     if (savedTodos) todos = JSON.parse(savedTodos);
     if (savedReminders) reminders = JSON.parse(savedReminders);
     if (savedUrgentTasks) urgentTasks = JSON.parse(savedUrgentTasks);
+    if (savedFamilyTasks) familyTasks = JSON.parse(savedFamilyTasks);
+    if (savedWorkTasks) workTasks = JSON.parse(savedWorkTasks);
     if (savedTheme) currentTheme = savedTheme;
     if (savedLanguage) currentLanguage = savedLanguage;
 }
@@ -25,6 +31,8 @@ function saveData() {
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('reminders', JSON.stringify(reminders));
     localStorage.setItem('urgentTasks', JSON.stringify(urgentTasks));
+    localStorage.setItem('familyTasks', JSON.stringify(familyTasks));
+    localStorage.setItem('workTasks', JSON.stringify(workTasks));
     localStorage.setItem('theme', currentTheme);
     localStorage.setItem('language', currentLanguage);
 }
@@ -49,7 +57,7 @@ function toggleLanguage() {
     saveData(); // Save the language preference
 }
 
-// Update language dynamically
+// Update language dynamically (with icon preservation)
 function updateLanguage() {
     const translations = {
         en: {
@@ -60,6 +68,8 @@ function updateLanguage() {
             reminder: "Task Reminder",
             todo: "View To-Do List",
             urgentTasks: "Urgent Tasks",
+            familyTasks: "Family Tasks",  // Added translation
+            workTasks: "Work Tasks",      // Added translation
         },
         zh: {
             appTitle: "多功能备忘应用",
@@ -69,17 +79,21 @@ function updateLanguage() {
             reminder: "任务提醒",
             todo: "查看待办事项",
             urgentTasks: "紧急任务",
+            familyTasks: "家庭事项",       // Added translation
+            workTasks: "工作事项",         // Added translation
         }
     };
 
     const t = translations[currentLanguage];
-    document.getElementById('app-title').textContent = t.appTitle;
-    document.getElementById('theme-toggle').textContent = t.themeToggle;
-    document.getElementById('language-toggle').textContent = t.languageToggle;
-    document.getElementById('btn-memo').textContent = t.memo;
-    document.getElementById('btn-reminder').textContent = t.reminder;
-    document.getElementById('btn-todo').textContent = t.todo;
-    document.getElementById('btn-urgent').textContent = t.urgentTasks;
+    document.getElementById('app-title').innerHTML = `<i class="fas fa-sticky-note"></i> ${t.appTitle}`;
+    document.getElementById('theme-toggle').innerHTML = `<i class="fas fa-adjust"></i> ${t.themeToggle}`;
+    document.getElementById('language-toggle').innerHTML = `<i class="fas fa-language"></i> ${t.languageToggle}`;
+    document.getElementById('btn-memo').innerHTML = `<i class="fas fa-pencil-alt"></i> ${t.memo}`;
+    document.getElementById('btn-reminder').innerHTML = `<i class="fas fa-clock"></i> ${t.reminder}`;
+    document.getElementById('btn-todo').innerHTML = `<i class="fas fa-list"></i> ${t.todo}`;
+    document.getElementById('btn-urgent').innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${t.urgentTasks}`;
+    document.getElementById('btn-family').innerHTML = `<i class="fas fa-home"></i> ${t.familyTasks}`;  // Added button
+    document.getElementById('btn-work').innerHTML = `<i class="fas fa-briefcase"></i> ${t.workTasks}`;  // Added button
 }
 
 // Show dynamic module content
@@ -91,9 +105,102 @@ function showModule(moduleName) {
         loadReminderModule(mainContent);
     } else if (moduleName === 'todo') {
         loadTodoModule(mainContent);
+    } else if (moduleName === 'family') {
+        loadFamilyModule(mainContent);  // Added function for family tasks
+    } else if (moduleName === 'work') {
+        loadWorkModule(mainContent);    // Added function for work tasks
     }
 }
 
+// Load Family Module
+function loadFamilyModule(container) {
+    container.innerHTML = `
+        <h2>Family Tasks</h2>
+        <input type="text" id="familyInput" placeholder="Enter family task..." />
+        <input type="datetime-local" id="familyTime" />
+        <button onclick="addFamilyTask()">Add Family Task</button>
+        <ul id="familyList"></ul>
+    `;
+    displayFamilyTasks();
+}
+
+function addFamilyTask() {
+    const familyInput = document.getElementById('familyInput').value.trim();
+    const familyTime = document.getElementById('familyTime').value;
+
+    if (!familyInput || !familyTime) {
+        alert("Please enter task content and time!");
+        return;
+    }
+
+    const newFamilyTask = {
+        text: familyInput,
+        time: familyTime,
+        completed: false,
+        urgent: false,
+    };
+
+    familyTasks.push(newFamilyTask);
+    document.getElementById('familyInput').value = "";
+    document.getElementById('familyTime').value = "";
+    displayFamilyTasks();
+    saveData(); // Save after adding new family task
+}
+
+function displayFamilyTasks() {
+    const familyList = document.getElementById('familyList');
+    familyList.innerHTML = '';
+
+    familyTasks.forEach((task, index) => {
+        const li = createTaskItem(task, index, "family");
+        familyList.appendChild(li);
+    });
+}
+
+// Load Work Module
+function loadWorkModule(container) {
+    container.innerHTML = `
+        <h2>Work Tasks</h2>
+        <input type="text" id="workInput" placeholder="Enter work task..." />
+        <input type="datetime-local" id="workTime" />
+        <button onclick="addWorkTask()">Add Work Task</button>
+        <ul id="workList"></ul>
+    `;
+    displayWorkTasks();
+}
+
+function addWorkTask() {
+    const workInput = document.getElementById('workInput').value.trim();
+    const workTime = document.getElementById('workTime').value;
+
+    if (!workInput || !workTime) {
+        alert("Please enter task content and time!");
+        return;
+    }
+
+    const newWorkTask = {
+        text: workInput,
+        time: workTime,
+        completed: false,
+        urgent: false,
+    };
+
+    workTasks.push(newWorkTask);
+    document.getElementById('workInput').value = "";
+    document.getElementById('workTime').value = "";
+    displayWorkTasks();
+    saveData(); // Save after adding new work task
+}
+
+function displayWorkTasks() {
+    const workList = document.getElementById('workList');
+    workList.innerHTML = '';
+
+    workTasks.forEach((task, index) => {
+        const li = createTaskItem(task, index, "work");
+        workList.appendChild(li);
+    });
+}
 // Load Memo Module
 function loadMemoModule(container) {
     container.innerHTML = `
@@ -244,7 +351,7 @@ function createTaskItem(task, index, type) {
 
     const urgentBtn = document.createElement('button');
     urgentBtn.className = 'urgent-btn';
-    urgentBtn.textContent = task.urgent ? 'Remove Urgent' : 'Mark as Urgent';
+    urgentBtn.textContent = task.urgent ? 'Remove Urgent' : 'Mark Urgent';
     urgentBtn.onclick = () => toggleUrgent(task, index, type);
 
     const deleteBtn = document.createElement('button');
@@ -260,51 +367,55 @@ function createTaskItem(task, index, type) {
     return li;
 }
 
-// Toggle Completion
+// Toggle completion
 function toggleCompletion(task, index, type) {
     task.completed = !task.completed;
-    refreshDisplay(type);
-    saveData(); // Save data after toggle
+    updateList(type);
+    saveData(); // Save changes
 }
 
-// Toggle Urgent Status
+
+// Toggle urgency
 function toggleUrgent(task, index, type) {
     task.urgent = !task.urgent;
-
     if (task.urgent) {
         urgentTasks.push(task);
     } else {
-        urgentTasks = urgentTasks.filter(urgentTask => urgentTask !== task);
+        urgentTasks = urgentTasks.filter((t) => t !== task);
     }
-
-    refreshDisplay(type);
-    saveData(); // Save data after urgent status toggle
+    updateList(type);
+    saveData(); // Save changes
 }
 
-// Refresh display after task modification
-function refreshDisplay(type) {
+// Delete task
+function deleteTask(index, type) {
+  if (type === 'memo') todos.splice(index, 1);
+ else if (type === 'reminder') reminders.splice(index, 1);
+    else if (type === 'urgent') urgentTasks.splice(index, 1);
+
+   else if (type === 'family') familyTasks.splice(index, 1);
+        
+     else if (type === 'work') workTasks.splice(index, 1);
+       
+    updateList(type);
+
+    saveData();//
+}
+// Update the list
+function updateList(type) {
     if (type === 'memo') displayMemos();
     else if (type === 'reminder') displayReminders();
-    else if (type === 'todo') displayTodos();
     else if (type === 'urgent') displayUrgentTasks();
+    else if (type === 'todo') displayTodos();
+    else if (type === 'family') displayFamilyTasks();
+    else if (type === 'work') displayWorkTasks();
 }
 
-// Delete Task
-function deleteTask(index, type) {
-    if (type === 'memo') {
-        todos.splice(index, 1);
-    } else if (type === 'reminder') {
-        reminders.splice(index, 1);
-    } else if (type === 'urgent') {
-        urgentTasks.splice(index, 1);
-    }
-    refreshDisplay(type);
-    saveData(); // Save data after deletion
-}
 
-// Initial load
+// Load initial data
 loadData();
 updateLanguage();
+showModule('memo');  // Start with memo module
 refreshDisplay('memo');
 
 // Event listeners
@@ -313,5 +424,6 @@ document.getElementById('language-toggle').addEventListener('click', toggleLangu
 document.getElementById('btn-memo').addEventListener('click', () => showModule('memo'));
 document.getElementById('btn-reminder').addEventListener('click', () => showModule('reminder'));
 document.getElementById('btn-todo').addEventListener('click', () => showModule('todo'));
+document.getElementById('btn-family').addEventListener('click', () => showModule('family'));
+document.getElementById('btn-work').addEventListener('click', () => showModule('work'));
 document.getElementById('btn-urgent').addEventListener('click', showUrgentTasks);
-
